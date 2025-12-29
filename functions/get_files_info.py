@@ -1,4 +1,5 @@
 import os
+from google.genai import types
 
 def get_files_info(working_directory, directory="."):
     working_dir_abs = os.path.abspath(working_directory) # Get absolute path of the working directory
@@ -23,3 +24,18 @@ def get_files_info(working_directory, directory="."):
     for file in list_of_files:
         result += f"\n- {file}: file_size={os.path.getsize(os.path.join(target_dir, file))}, is_dir={os.path.isdir(os.path.join(target_dir, file))}"
     return result
+
+
+schema_get_files_info = types.FunctionDeclaration(
+    name="get_files_info",
+    description="Lists files... Use this ONLY when the user specifically asks to see the contents of a directory or asks 'what files are there?'.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "directory": types.Schema(
+                type=types.Type.STRING,
+                description="Directory path to list files from, relative to the working directory (default is the working directory itself)",
+            ),
+        },
+    ),
+)

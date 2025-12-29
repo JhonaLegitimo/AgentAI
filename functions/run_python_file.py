@@ -1,5 +1,6 @@
 import os
 import subprocess
+from google.genai import types
 
 def run_python_file(working_directory, file_path, args=None):
     working_dir_abs = os.path.abspath(working_directory)  # Get absolute path of the working directory
@@ -41,4 +42,24 @@ def run_python_file(working_directory, file_path, args=None):
     except subprocess.TimeoutExpired as e:
         return f"Process timed out after 30 seconds. Partial STDOUT: {e.stdout}"
 
-print(run_python_file("calculator", "main.py"))
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="Executes a Python script immediately. Use this function when the user asks to run, execute, or start a .py file. Do not check for file existence first; just run it.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="Path to the Python file to execute, relative to the working directory",
+            ),
+            "args": types.Schema(
+                type=types.Type.ARRAY,
+                items=types.Schema(
+                    type=types.Type.STRING
+                ),
+                description="Optional list of arguments to pass to the Python file",
+            ),
+        },
+        required=["file_path"]
+    ),
+) 
