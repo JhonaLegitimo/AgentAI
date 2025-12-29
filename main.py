@@ -23,8 +23,6 @@ def main():
     args = parser.parse_args()
 
     messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
-    print("DEBUG available_functions type:", type(available_functions))
-    print("DEBUG available_functions:", available_functions)
 
     for _ in range(20):
         response = client.models.generate_content(
